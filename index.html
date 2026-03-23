@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pour Over Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1a1410;
+      color: #e8ddd3;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #c9a96e;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: #8a7e72;
+      margin-top: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 1.2rem 3rem;
+    }
+
+    /* Method selector */
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .method-btn {
+      background: #241e18;
+      border: 1.5px solid #3a3028;
+      border-radius: 10px;
+      padding: 1rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: left;
+    }
+
+    .method-btn:hover {
+      border-color: #6b5a42;
+      background: #2a231b;
+    }
+
+    .method-btn.active {
+      border-color: #c9a96e;
+      background: #2e2518;
+      box-shadow: 0 0 20px rgba(201, 169, 110, 0.08);
+    }
+
+    .method-btn .name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e0d2c0;
+      margin-bottom: 0.2rem;
+    }
+
+    .method-btn.active .name { color: #c9a96e; }
+
+    .method-btn .origin {
+      font-size: 0.7rem;
+      color: #7a6e62;
+      letter-spacing: 0.03em;
+    }
+
+    /* Dose slider */
+    .dose-section {
+      background: #241e18;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #3a3028;
+    }
+
+    .dose-section label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #8a7e72;
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .dose-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dose-row input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      background: #3a3028;
+      border-radius: 2px;
+      outline: none;
+    }
+
+    .dose-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #c9a96e;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .dose-value {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #c9a96e;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    .dose-value span {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #8a7e72;
+    }
+
+    /* Parameters */
+    .params {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .param-card {
+      background: #241e18;
+      border: 1px solid #3a3028;
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .param-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .param-card .value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e8ddd3;
+      line-height: 1.2;
+    }
+
+    .param-card .unit {
+      font-size: 0.75rem;
+      color: #8a7e72;
+      font-weight: 400;
+    }
+
+    .param-card .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7a6e62;
+      margin-top: 0.4rem;
+    }
+
+    /* Pour steps */
+    .steps-section {
+      background: #241e18;
+      border: 1px solid #3a3028;
+      border-radius: 12px;
+      padding: 1.4rem;
+    }
+
+    .steps-section h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #8a7e72;
+      margin-bottom: 1rem;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #2e2820;
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #2e2518;
+      border: 1.5px solid #c9a96e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #c9a96e;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e0d2c0;
+      margin-bottom: 0.15rem;
+    }
+
+    .step-detail {
+      font-size: 0.78rem;
+      color: #8a7e72;
+      line-height: 1.4;
+    }
+
+    .step-water {
+      font-weight: 600;
+      color: #7fb5d5;
+    }
+
+    .step-time {
+      font-weight: 600;
+      color: #c9a96e;
+    }
+
+    /* Description */
+    .method-desc {
+      font-size: 0.8rem;
+      color: #8a7e72;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      padding: 0 0.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pour Over</h1>
+    <p>Select a method to get your recipe</p>
+  </header>
+
+  <div class="container">
+    <div class="method-grid" id="methodGrid"></div>
+    <p class="method-desc" id="methodDesc"></p>
+
+    <div class="dose-section">
+      <label>Coffee dose</label>
+      <div class="dose-row">
+        <input type="range" id="doseSlider" min="10" max="30" value="20" step="1">
+        <div class="dose-value"><span id="doseDisplay">20</span> <span>g</span></div>
+      </div>
+    </div>
+
+    <div class="params" id="params"></div>
+
+    <div class="steps-section">
+      <h3>Pour steps</h3>
+      <div id="steps"></div>
+    </div>
+  </div>
+
+  <script>
+    const methods = {
+      "4:6": {
+        name: "4:6 Method",
+        origin: "Tetsu Kasuya",
+        ratio: 15,
+        defaultDose: 20,
+        temp: "92",
+        grind: "Medium-Coarse",
+        description: "Splits the brew into 40% for acidity/sweetness balance and 60% for strength. Five equal pours give you simple, repeatable control over flavor.",
+        steps: (dose, water) => {
+          const p40 = Math.round(water * 0.4);
+          const p60 = Math.round(water * 0.6);
+          const pourA1 = Math.round(p40 * 0.5);
+          const pourA2 = p40 - pourA1;
+          const pourB = Math.round(p60 / 3);
+          return [
+            { title: "1st pour (sweetness)", detail: `Pour <span class="step-water">${pourA1}g</span> water, wait <span class="step-time">45s</span>` },
+            { title: "2nd pour (acidity)", detail: `Pour <span class="step-water">${pourA2}g</span> more, wait <span class="step-time">45s</span>` },
+            { title: "3rd pour (strength)", detail: `Pour <span class="step-water">${pourB}g</span> more, wait <span class="step-time">45s</span>` },
+            { title: "4th pour", detail: `Pour <span class="step-water">${pourB}g</span> more, wait <span class="step-time">45s</span>` },
+            { title: "5th pour", detail: `Pour <span class="step-water">${p60 - pourB * 2}g</span> to reach <span class="step-water">${water}g</span> total. Draw down by <span class="step-time">3:30</span>` }
+          ];
+        }
+      },
+      hoffmann: {
+        name: "Hoffmann V60",
+        origin: "James Hoffmann",
+        ratio: 16.67,
+        defaultDose: 15,
+        temp: "95-100",
+        grind: "Medium-Fine",
+        description: "A single-pour technique after the bloom. Swirl to flatten the bed for even extraction. Simple and forgiving with excellent clarity.",
+        steps: (dose, water) => {
+          const bloom = dose * 2;
+          const remaining = water - bloom;
+          const mid = Math.round(water * 0.6);
+          return [
+            { title: "Bloom", detail: `Pour <span class="step-water">${bloom}g</span>, swirl gently. Wait <span class="step-time">45s</span>` },
+            { title: "Main pour", detail: `Pour steadily to <span class="step-water">${mid}g</span> by <span class="step-time">1:15</span>` },
+            { title: "Final pour", detail: `Pour slowly to <span class="step-water">${water}g</span> by <span class="step-time">1:45</span>` },
+            { title: "Swirl & draw down", detail: `Gentle swirl, let it draw down. Target <span class="step-time">3:00-3:30</span> total` }
+          ];
+        }
+      },
+      osmotic: {
+        name: "Osmotic Flow",
+        origin: "Japanese Style",
+        ratio: 15,
+        defaultDose: 20,
+        temp: "88-92",
+        grind: "Medium",
+        description: "Uses a slow, centered pour to create osmotic pressure that extracts gently. Produces a delicate, tea-like cup with complex sweetness.",
+        steps: (dose, water) => {
+          const bloom = dose * 2;
+          const phase = Math.round((water - bloom) / 3);
+          return [
+            { title: "Bloom", detail: `Pour <span class="step-water">${bloom}g</span> in tight circles. Wait <span class="step-time">30s</span>` },
+            { title: "Slow center pour", detail: `Pour <span class="step-water">${phase}g</span> in a thin stream to center only. <span class="step-time">1:00-1:30</span>` },
+            { title: "Gentle circles", detail: `Pour <span class="step-water">${phase}g</span> in slow, small circles. <span class="step-time">2:00-2:30</span>` },
+            { title: "Final pour", detail: `Pour remaining <span class="step-water">${water - bloom - phase * 2}g</span> to center. Total <span class="step-time">3:30-4:00</span>` }
+          ];
+        }
+      },
+      slowdrip: {
+        name: "Slow Drip",
+        origin: "Kalita Wave Style",
+        ratio: 16,
+        defaultDose: 25,
+        temp: "93",
+        grind: "Medium",
+        description: "Multiple small, controlled pours maintain a consistent water level. The flat-bottom bed promotes even extraction with a full, balanced body.",
+        steps: (dose, water) => {
+          const bloom = dose * 3;
+          const pours = 4;
+          const perPour = Math.round((water - bloom) / pours);
+          return [
+            { title: "Bloom", detail: `Pour <span class="step-water">${bloom}g</span>, let it degas. Wait <span class="step-time">45s</span>` },
+            { title: "2nd pour", detail: `Slowly pour <span class="step-water">${perPour}g</span> in circles. Wait <span class="step-time">30s</span>` },
+            { title: "3rd pour", detail: `Pour <span class="step-water">${perPour}g</span>, keep the water level steady. Wait <span class="step-time">30s</span>` },
+            { title: "4th pour", detail: `Pour <span class="step-water">${perPour}g</span>. Wait <span class="step-time">30s</span>` },
+            { title: "Final pour", detail: `Pour remaining <span class="step-water">${water - bloom - perPour * 3}g</span> to <span class="step-water">${water}g</span>. Draw down by <span class="step-time">4:00</span>` }
+          ];
+        }
+      },
+      rao: {
+        name: "Rao Spin",
+        origin: "Scott Rao",
+        ratio: 16.67,
+        defaultDose: 18,
+        temp: "95",
+        grind: "Medium-Fine",
+        description: "A continuous circular pour with a signature spin at the end. The agitation ensures uniform extraction and a clean, sweet cup.",
+        steps: (dose, water) => {
+          const bloom = dose * 3;
+          return [
+            { title: "Bloom + spin", detail: `Pour <span class="step-water">${bloom}g</span>, give the dripper a swirl. Wait <span class="step-time">45s</span>` },
+            { title: "Continuous pour", detail: `Pour steadily in circles to <span class="step-water">${water}g</span> by <span class="step-time">1:30</span>` },
+            { title: "Rao spin", detail: `Give the dripper a firm swirl to flatten the bed` },
+            { title: "Draw down", detail: `Wait for full draw down. Target <span class="step-time">2:45-3:15</span> total` }
+          ];
+        }
+      },
+      classic: {
+        name: "Bloom & Pulse",
+        origin: "Classic Method",
+        ratio: 16,
+        defaultDose: 20,
+        temp: "93",
+        grind: "Medium",
+        description: "The traditional approach: bloom, then pulse pour in intervals. Reliable and easy to learn, producing a well-rounded, balanced cup.",
+        steps: (dose, water) => {
+          const bloom = dose * 2;
+          const remaining = water - bloom;
+          const pulses = 3;
+          const perPulse = Math.round(remaining / pulses);
+          return [
+            { title: "Bloom", detail: `Pour <span class="step-water">${bloom}g</span> to saturate grounds. Wait <span class="step-time">30-45s</span>` },
+            { title: "1st pulse", detail: `Pour <span class="step-water">${perPulse}g</span> in circles. Wait until bed drops <span class="step-time">20s</span>` },
+            { title: "2nd pulse", detail: `Pour <span class="step-water">${perPulse}g</span> more. Wait <span class="step-time">20s</span>` },
+            { title: "3rd pulse", detail: `Pour remaining <span class="step-water">${remaining - perPulse * 2}g</span> to <span class="step-water">${water}g</span>. Draw down by <span class="step-time">3:00-3:30</span>` }
+          ];
+        }
+      }
+    };
+
+    let activeMethod = "4:6";
+
+    function render() {
+      const m = methods[activeMethod];
+      const dose = parseInt(document.getElementById("doseSlider").value);
+      const water = Math.round(dose * m.ratio);
+
+      // Method buttons
+      const grid = document.getElementById("methodGrid");
+      grid.innerHTML = Object.entries(methods).map(([key, val]) =>
+        `<button class="method-btn ${key === activeMethod ? 'active' : ''}" data-key="${key}">
+          <div class="name">${val.name}</div>
+          <div class="origin">${val.origin}</div>
+        </button>`
+      ).join("");
+
+      grid.querySelectorAll(".method-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeMethod = btn.dataset.key;
+          const newMethod = methods[activeMethod];
+          document.getElementById("doseSlider").value = newMethod.defaultDose;
+          document.getElementById("doseDisplay").textContent = newMethod.defaultDose;
+          render();
+        });
+      });
+
+      // Description
+      document.getElementById("methodDesc").textContent = m.description;
+
+      // Dose display
+      document.getElementById("doseDisplay").textContent = dose;
+
+      // Param cards
+      document.getElementById("params").innerHTML = `
+        <div class="param-card">
+          <div class="icon">&#9749;</div>
+          <div class="value">${dose}<span class="unit">g</span></div>
+          <div class="label">Coffee</div>
+        </div>
+        <div class="param-card">
+          <div class="icon">&#128167;</div>
+          <div class="value">${water}<span class="unit">g</span></div>
+          <div class="label">Water</div>
+        </div>
+        <div class="param-card">
+          <div class="icon">&#127777;&#65039;</div>
+          <div class="value">${m.temp}<span class="unit">&deg;C</span></div>
+          <div class="label">Temperature</div>
+        </div>
+        <div class="param-card">
+          <div class="icon">&#9881;&#65039;</div>
+          <div class="value" style="font-size:1.1rem">${m.grind}</div>
+          <div class="label">Grind</div>
+        </div>
+      `;
+
+      // Steps
+      const steps = m.steps(dose, water);
+      document.getElementById("steps").innerHTML = steps.map((s, i) =>
+        `<div class="step">
+          <div class="step-num">${i + 1}</div>
+          <div class="step-content">
+            <div class="step-title">${s.title}</div>
+            <div class="step-detail">${s.detail}</div>
+          </div>
+        </div>`
+      ).join("");
+    }
+
+    document.getElementById("doseSlider").addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
