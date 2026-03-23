@@ -1,2 +1,2 @@
-![Alt text](figs/pic1.png)  
+![Alt text](fig/pic1.png)  
 *No more calculations in the morning! Barista RedPanda serving*
